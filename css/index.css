@@ -1,6 +1,59 @@
-body {
-    overflow: hidden;
+main {
+    max-width: 55rem;
+    padding: 1rem;
+    margin: 0 auto;
 }
+
+main h1 {
+    font-size: 2rem;
+    margin: 1.5rem 0;
+}
+
+main p {
+    font-size: 1rem;
+    margin: 0 0 1rem 0;
+}
+
+main button {
+    outline: none;
+    border: none;
+    background: dodgerblue;
+    user-select: none;
+    color: #fff;
+    margin: 0 0 1.25rem 0;
+    padding: 0.75rem 1.25rem;
+    font-size: 1rem;
+    border-radius: 0.25rem;
+    cursor: pointer;
+}
+
+main .canvas-container {
+    width: 100%;
+    display: flex;
+    align-items: stretch;
+    gap: 1.5rem;
+}
+
+main .canvas-container canvas {
+    flex: 0 0 50%;
+    border-radius: 0.75rem;
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.25);
+}
+/*<main>
+        <h1>🎨 Evolve a Painting</h1>
+        <p>Leverage genetic algorithms to evovle a population of paintings</p>
+        <button>Start Evolving</button>
+        
+        <div class="canvas-container">
+            <canvas id="img-source"></canvas>
+            <canvas id="img-result"></canvas>
+        </div>
+    </main>
+
+    <div id="settings">
+        <ion-icon name="settings-outline"></ion-icon>
+    </div>
+*/
 
 #settings {
     height: 2.5rem;
@@ -23,18 +76,3 @@ body {
 #settings ion-icon {
     font-size: 1.25rem;
 }
-/*<main>
-        <h1>🎨 Evolve a Painting</h1>
-        <p>Leverage genetic algorithms to evovle a population of paintings</p>
-        <button>Start Evolving</button>
-        
-        <div class="canvas-container">
-            <canvas id="img-source"></canvas>
-            <canvas id="img-result"></canvas>
-        </div>
-    </main>
-
-    <div id="settings">
-        <ion-icon name="settings-outline"></ion-icon>
-    </div>
-*/
