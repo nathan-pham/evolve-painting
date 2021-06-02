@@ -39,6 +39,8 @@ main .canvas-container canvas {
     border-radius: 0.75rem;
     box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.25);
 }
+
+
 /*<main>
         <h1>🎨 Evolve a Painting</h1>
         <p>Leverage genetic algorithms to evovle a population of paintings</p>
