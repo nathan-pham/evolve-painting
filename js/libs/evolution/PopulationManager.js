@@ -72,7 +72,7 @@ export default class PopulationManager {
 
     core(resultCtx, sourceCtx) {
         this.generation++
-        
+
         const bestPopulation = this.calculateFitness(sourceCtx)
         const pool = this.generatePool()
         const cachePopulations = []
@@ -94,6 +94,8 @@ export default class PopulationManager {
         }
 
         this.populations = cachePopulations
+
+        resultCtx.clearRect(0, 0, this.dimensions.width, this.dimensionsheight);
         bestPopulation.render(resultCtx)
     }
 }
