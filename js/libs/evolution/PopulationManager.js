@@ -1,5 +1,7 @@
-import { resolution } from "../canvas.js"
 import Population from "./Population.js"
+
+import { resolution } from "../canvas.js"
+import { random } from "../math.js"
 
 export default class PopulationManager {
     generation = 0

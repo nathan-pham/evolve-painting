@@ -4,7 +4,7 @@ export default class Population {
     polygons = []
     fitness = 0
 
-    constructor(dimensions, verticeCount, polygonCount) {
+    constructor(dimensions, polygonCount, verticeCount) {
         for(let i = 0; i < polygonCount; i++) {
             this.polygons.push(new Polygon(dimensions, verticeCount))
         }
