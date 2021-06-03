@@ -17,7 +17,6 @@ main p {
 main button {
     margin: 0 0 1.25rem 0;
     padding: 0.75rem 1.25rem;
-
 }
 
 main .canvas-container {
@@ -84,6 +83,30 @@ footer {
 .modal-wrapper .input-wrapper {
     display: flex;
     justify-content: space-between;
+}
+
+.modal-wrapper p {
+    margin: 0;
+}
+
+.modal-wrapper #statistics {
+    margin: 0 0 1rem 0;
+}
+
+.modal-wrapper input[type="text"] {
+    border: none;
+    outline: none;
+    padding: 0.75rem 1.25rem;
+    font-size: 1rem;
+    background: #eee;
+    border-radius: 0.25rem;
+    margin: 0 0 1rem 0;
+}
+
+.modal-wrapper button {
+    padding: 0.75rem 1.25rem;
+    margin: 1rem 0 0 0;
+    align-self: flex-end;
 }
 
 /* .modal-wrapper .modal input {

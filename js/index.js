@@ -15,7 +15,6 @@ const main = (async (STATE) => {
         width: sourceCanvas.offsetWidth * STATE.RESOLUTION_FACTOR,
         height: sourceCanvas.offsetWidth * STATE.RESOLUTION_FACTOR
     }
-    
     resolution(sourceCanvas, dimensions, STATE.RESOLUTION_FACTOR)
     resolution(resultCanvas, dimensions, STATE.RESOLUTION_FACTOR)
 
@@ -24,18 +23,24 @@ const main = (async (STATE) => {
 
     const populationManager = new PopulationManger({ dimensions, polygonCount: 100 })
     const sourceCtx = sourceCanvas.getContext("2d")
+    const resultCtx = resultCanvas.getContext("2d")
     const source = sourceCtx.getImageData(0, 0, dimensions.width, dimensions.height)
 
-    const resultCtx = resultCanvas.getContext("2d")
+    let modal
 
     settingsButton.addEventListener("click", () => {
-        document.body.appendChild(modalComponent("Settings",
-            h("p", {}, "Warning: changing settings will reset evolution"),
-            h("input", { placeholder: STATE.SOURCE_PATH, value: STATE.SOURCE_PATH }),
-            inputComponent("# of Polygons", { min: 50, max: 100, value: 50, name: "polygons" }),
-            inputComponent("# of Vertices", { min: 50, max: 100, value: 50, name: "vertices" }),
+        const { POLYGON_COUNT: polygons, VERTICE_COUNT: vertices } = STATE
+
+        modal = modalComponent("Settings",
+            h("p", { style: "color: red" }, "Warning: changing settings will reset evolution!"),
+            h("p", { id: "statistics" }, "Start evolution to see statistics."),
+            h("input", { placeholder: STATE.SOURCE_PATH, value: STATE.SOURCE_PATH, type: "text" }),
+            inputComponent(`${polygons}/1000 Polygons`, { min: 50, max: 1000, value: polygons, name: "polygons" }),
+            inputComponent(`${vertices}/100 Vertices`, { min: 3, max: 100,  value: vertices, name: "vertices" }),
             h("button", {}, "Save")
-        ))
+        )
+
+        document.body.appendChild(modal)
     })
 
     /*
@@ -46,7 +51,10 @@ const main = (async (STATE) => {
         if(evolveButton.textContent.toLowerCase().includes("start")) {
             STATE.EV_ID = setInterval(() => {
                 populationManager.core(resultCtx, source)
-                // statistics.textContent = `mutations: ${populationManager.mutations}, improvements: ${populationManager.improvements}, fitness: ${populationManager.normalizedFitness.toFixed(2)}%`
+
+                if(modal && document.body.contains(modal)) {
+                    document.getElementById("statistics").textContent = `mutations: ${populationManager.mutations}, improvements: ${populationManager.improvements}, fitness: ${populationManager.normalizedFitness.toFixed(2)}%`
+                }
             }, 0)
             
             evolveButton.textContent = "Stop Evolving"
@@ -60,7 +68,9 @@ const main = (async (STATE) => {
 const INITIAL_STATE = {
     SOURCE_PATH: "/js/libs/evolution/mona-lisa.jpg",
     RESOLUTION_FACTOR: 3,
-    EV_ID: 0 
+    POLYGON_COUNT: 50,
+    VERTICE_COUNT: 6,
+    EV_ID: 0
 }
 
 const STATE = new Proxy(INITIAL_STATE, {
