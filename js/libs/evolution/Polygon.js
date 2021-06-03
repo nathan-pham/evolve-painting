@@ -1,7 +1,8 @@
 import { random } from "../math.js"
 
 export default class Polygon {
-    color = { r: random(255), g: random(255), b: random(255), a: 0.001 }
+    // color = { r: random(255), g: random(255), b: random(255), a: 0.001 }
+    color = { r: 0, g: 0, b: 0, a: 0.001 }
     vertices = []
 
     constructor(dimensions, verticeCount) {

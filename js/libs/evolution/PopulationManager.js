@@ -8,7 +8,10 @@ export default class PopulationManager {
     verticeCount = 4
     populations = []
     dimensions = {}
+
     generation = 0
+    bestPopulation = { fitness: -1 }
+    // fitnessPercent = 0
 
     constructor({ dimensions, populationCount=1, polygonCount=100, verticeCount=6, mutationMode="medium" }) {
         this.mutationMode = mutationMode
@@ -18,39 +21,33 @@ export default class PopulationManager {
         for(let i = 0; i < populationCount; i++) {
             this.populations.push(new Population(dimensions, polygonCount, verticeCount))
         }
-
-        const canvas = document.createElement("canvas")
-        const ctx = canvas.getContext("2d")
-        resolution(canvas, this.dimensions)
-
-        this.testCtx = ctx
     }
 
-    calculateFitness(sourceCtx) {
-        const source = sourceCtx.getImageData(0, 0, this.dimensions.width, this.dimensions.height)
-
+    calculateFitness(source) {
         let totalFitness = 0
-        let bestPopulation = this.populations[0]
+        let bestPopulation = { fitness: -1 }
 
         for(const population of this.populations) {
-            population.render(this.testCtx)
-            const result = this.testCtx.getImageData(0, 0, this.dimensions.width, this.dimensions.height)
+            population.calculateFitness(this.dimensions, source)
 
-            population.calculateFitness(source, result)
-            totalFitness += population.fitness
-                
             if(population.fitness > bestPopulation.fitness) {
                 bestPopulation = population
             }
+            
+            totalFitness += population.fitness
         }
 
         for(const population of this.populations) {
             population.fitness /= totalFitness
-
-            // 1-FITNESS_BEST/IWIDTH*IHEIGHT*3*255
         }
 
-        return bestPopulation
+        if(bestPopulation.fitness > this.bestPopulation.fitness) {
+            this.bestPopulation = bestPopulation
+        }
+        
+        // this.fitnessPercent = Math.abs((1 - (bestPopulation.fitness * totalFitness)) / (this.dimensions.width * this.dimensions.height * 3 * 255)) * 100
+
+        return this.bestPopulation
     }
 
     generatePool() {
@@ -61,18 +58,18 @@ export default class PopulationManager {
                 pool.push(population)
             }
         }
-        
+
         return pool
     }
 
     selectPopulation(pool) {
-        return pool[Math.floor(random(pool.length))]
+        return this.populations.length == 1 ? this.populations[0] : pool[Math.floor(random(pool.length))]
     }
 
-    core(resultCtx, sourceCtx, crossover=false) {
+    core(resultCtx, source, crossover=false) {
         this.generation++
 
-        const bestPopulation = this.calculateFitness(sourceCtx)
+        this.calculateFitness(source)
         const pool = this.generatePool()
         const cachePopulations = []
 
@@ -90,16 +87,36 @@ export default class PopulationManager {
                     childPolygons.push(i < divider ? parentA.polygons[i] : parentB.polygons[i])
                 }
     
-                child = new Population(childPolygons)
+                child = new Population(this.dimensions, childPolygons)
             } else {
-                child = new Population(this.selectPopulation(pool).polygons)
+                child = new Population(this.dimensions, this.selectPopulation(pool).polygons)
             }
 
+            let childClone = child.clone()
+            childClone.calculateFitness(this.dimensions, source)
+
             child.mutate(this.dimensions, this.verticeCount, this.mutationMode)
-            cachePopulations.push(child)
+            child.calculateFitness(this.dimensions, source)
+
+            const sortPopulations = [this.bestPopulation, childClone, child]
+            const bestOfMutated = sortPopulations.reduce(function(a, b) {
+                return a.fitness > b.fitness ? a : b
+            })
+
+            cachePopulations.push(bestOfMutated)
+            
+            // if(this.bestPopulation.fitness )
+
+            // if( > ) {
+            //     cachePopulations.push(childClone)
+            // } else {
+            //     cachePopulations.push(child)
+            // }
         }
 
         this.populations = cachePopulations
-        bestPopulation.render(resultCtx)
+
+        resultCtx.clearRect(0, 0, this.dimensions.width, this.dimensions.height)
+        this.bestPopulation.render(resultCtx)
     }
 }

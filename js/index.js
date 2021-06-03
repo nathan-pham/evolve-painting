@@ -9,7 +9,8 @@ const path = "/js/libs/evolution/mona-lisa.jpg"
 
 const main = (async () => {
     const [sourceCanvas, resultCanvas] = $("canvas")
-    const generation = $("#generation")[0]
+    const generationSpan = $("#generation")[0]
+    // const fitnessSpan = $("#fitness")[0]
 
     const dimensions = {
         width: sourceCanvas.offsetWidth,
@@ -26,10 +27,12 @@ const main = (async () => {
     const sourceCtx = sourceCanvas.getContext("2d")
     const resultCtx = resultCanvas.getContext("2d")
 
+    const source = sourceCtx.getImageData(0, 0, dimensions.width, dimensions.height)
+
     animate(() => {
-        resultCtx.clearRect(0, 0, dimensions.width, dimensions.height);
-        populationManager.core(resultCtx, sourceCtx)
-        generation.textContent = populationManager.generation
+        populationManager.core(resultCtx, source)
+        generationSpan.textContent = populationManager.generation
+        // fitnessSpan.textContent = populationManager.fitnessPercent.toFixed(2)
     })
 })()
 

@@ -23,7 +23,7 @@ const animationLoop = () => {
         }
     } catch(e) {
         cancelAnimationFrame(rID)
-        throw new Error(e)
+        console.error(e)
     }
 }
 
