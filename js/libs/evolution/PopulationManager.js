@@ -19,7 +19,6 @@ export default class PopulationManager {
     createCanvas() {
         const canvas = document.createElement("canvas")
         const ctx = canvas.getContext("2d")
-
         resolution(canvas, this.dimensions)
 
         return [canvas, ctx]
@@ -51,8 +50,23 @@ export default class PopulationManager {
         return bestPopulation
     }
 
-    render(resultCtx, sourceCtx) {
+    generatePool() {
+        const pool = []
+        
+        for(const population of this.populations) {
+            for(let i = 0; i < population.fitness * 100; i++) {
+                pool.push(population)
+            }
+        }
+        
+        return pool
+    }
+
+    core(resultCtx, sourceCtx) {
         const bestPopulation = this.calculateFitness(sourceCtx)
+        const pool = this.generatePool()
+
+
         bestPopulation.render(resultCtx)
     }
 }
