@@ -25,10 +25,10 @@ const main = (async () => {
     const sourceCtx = sourceCanvas.getContext("2d")
     const resultCtx = resultCanvas.getContext("2d")
 
-    populationManager.render(resultCtx, sourceCtx)
 
-    // animate(() => {
-    //     // populationManager
-    // })
+    animate(() => {
+        populationManager.core(resultCtx, sourceCtx)
+        console.log(populationManager.generation)
+    })
 })()
 

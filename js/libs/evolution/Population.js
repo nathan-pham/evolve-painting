@@ -5,8 +5,12 @@ export default class Population {
     fitness = 0
 
     constructor(dimensions, polygonCount, verticeCount) {
-        for(let i = 0; i < polygonCount; i++) {
-            this.polygons.push(new Polygon(dimensions, verticeCount))
+        if(!polygonCount && !verticeCount && Array.isArray(dimensions)) {
+            this.polygons = dimensions
+        } else {
+            for(let i = 0; i < polygonCount; i++) {
+                this.polygons.push(new Polygon(dimensions, verticeCount))
+            }
         }
     }
 
@@ -14,6 +18,14 @@ export default class Population {
         for(const polygon of this.polygons) {
             polygon.render(ctx)
         }
+    }
+    
+    mutate(dimensions, verticeCount, mutationChance) {
+        for(let i = 0; i < this.polygons.length; i++) {
+            if(Math.random() < mutationChance) {
+                this.polygons[i] = new Polygon(dimensions, verticeCount)
+            }
+        }   
     }
 
     calculateFitness(source, result) {
