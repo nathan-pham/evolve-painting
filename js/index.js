@@ -3,30 +3,24 @@ import PopulationManger from "./libs/evolution/PopulationManager.js"
 
 import { resolution, load, fit } from "./libs/canvas.js"
 import { modalComponent } from "./components/modal.js"
+import { inputComponent } from "./components/input.js"
 import { h, $ } from "./utils.js"
 
-let STATE = {
-    SOURCE_PATH: "/js/libs/evolution/mona-lisa.jpg",
-    EV_ID: 0 
-}
-
-const main = (async () => {
+const main = (async (STATE) => {
     const [sourceCanvas, resultCanvas] = $("canvas")
     const settingsButton = $("#settings")[0]
     const evolveButton = $("#evolve")[0]
-    // const statistics = $("#statistics")[0]
-    // const fitnessSpan = $("#fitness")[0]
 
     const dimensions = {
-        width: sourceCanvas.offsetWidth,
-        height: sourceCanvas.offsetWidth
+        width: sourceCanvas.offsetWidth * STATE.RESOLUTION_FACTOR,
+        height: sourceCanvas.offsetWidth * STATE.RESOLUTION_FACTOR
     }
     
-    resolution(sourceCanvas, dimensions)
-    resolution(resultCanvas, dimensions)
+    resolution(sourceCanvas, dimensions, STATE.RESOLUTION_FACTOR)
+    resolution(resultCanvas, dimensions, STATE.RESOLUTION_FACTOR)
 
     const image = await load(STATE.SOURCE_PATH)
-    fit(image, sourceCanvas)
+    fit(sourceCanvas, image, STATE.RESOLUTION_FACTOR)
 
     const populationManager = new PopulationManger({ dimensions, polygonCount: 100 })
     const sourceCtx = sourceCanvas.getContext("2d")
@@ -38,14 +32,8 @@ const main = (async () => {
         document.body.appendChild(modalComponent("Settings",
             h("p", {}, "Warning: changing settings will reset evolution"),
             h("input", { placeholder: STATE.SOURCE_PATH, value: STATE.SOURCE_PATH }),
-            h("div", {}, 
-                h("input", { type: "range", min: 50, max: 100, value: 50, name: "polygons", id: "polygons" }),
-                h("label", { for: "polygons" }, "# of Polygons")
-            ),
-            h("div", {},
-                h("input", { type: "range", min: 50, max: 100, value: 50, name: "vertices", id: "vertices" }),
-                h("label", { for: "vertices" }, "# of Vertices")
-            ),
+            inputComponent("# of Polygons", { min: 50, max: 100, value: 50, name: "polygons" }),
+            inputComponent("# of Vertices", { min: 50, max: 100, value: 50, name: "vertices" }),
             h("button", {}, "Save")
         ))
     })
@@ -67,5 +55,24 @@ const main = (async () => {
             evolveButton.textContent = "Start Evolving"
         }
     })
-})()
+})
 
+const INITIAL_STATE = {
+    SOURCE_PATH: "/js/libs/evolution/mona-lisa.jpg",
+    RESOLUTION_FACTOR: 3,
+    EV_ID: 0 
+}
+
+const STATE = new Proxy(INITIAL_STATE, {
+    set: (obj, key, value) => {
+        obj[key] = value
+
+        if(key !== "EV_ID") {
+            main(STATE)
+        }
+
+        return true
+    }
+})
+
+main(STATE)
