@@ -22,13 +22,15 @@ export default class PopulationManager {
         this.generation++
         this.population.calculateFitness(source)
 
-        let child = new Population(this.dimensions, this.population.polygons)
+        let child = this.population.clone()
         child.mutate(this.mutationMode)
         child.calculateFitness(source)
 
         this.population = child.fitness > this.population.fitness ? child : this.population
 
-        resultCtx.clearRect(0, 0, this.dimensions.width, this.dimensions.height)
+        resultCtx.fillStyle = "rgb(255, 255, 255)"
+        resultCtx.fillRect(0, 0, this.dimensions.width, this.dimensions.height)
+
         this.population.render(resultCtx)
     }
 }

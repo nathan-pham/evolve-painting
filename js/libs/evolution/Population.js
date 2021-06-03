@@ -50,7 +50,7 @@ export default class Population {
                         this.polygons[i].color.g = random(255)
                     } else if(roulette < 0.75) {
                         this.polygons[i].color.b = random(255)
-                    } else {
+                    } else if(roulette < 1) {
                         this.polygons[i].color.a = Math.random()
                     }
                 } else {
@@ -69,11 +69,13 @@ export default class Population {
     calculateFitness(source) {
         this.fitness = 0
 
-        this.testCtx.clearRect(0, 0, this.dimensions.width, this.dimensions.height)
+        this.testCtx.fillStyle = "rgb(255, 255, 255)"
+        this.testCtx.fillRect(0, 0, this.dimensions.width, this.dimensions.height)
         this.render(this.testCtx)
+
         const result = this.testCtx.getImageData(0, 0, this.dimensions.width, this.dimensions.height)
 
-        for (let i = 0; i < source.data.length / 4; i++) {
+        for (let i = 0; i < source.data.length; i++) {
             if(i % 4 !== 3) {
                 this.fitness += Math.abs(source.data[i] - result.data[i])
             }
