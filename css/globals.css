@@ -11,3 +11,38 @@ html, body {
 *, ::before, ::after {
     box-sizing: inherit;
 }
+
+button {
+    outline: none;
+    border: none;
+    background: dodgerblue;
+    user-select: none;
+    color: #fff;
+    font-size: 1rem;
+    border-radius: 0.25rem;
+    cursor: pointer;
+    transition: filter 0.1s ease;
+}
+
+button:hover {
+    filter: brightness(0.9);
+}
+
+.icon {
+    cursor: pointer;
+    height: 2.5rem;
+    width: 2.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: background 0.1s ease;
+}
+
+.icon:hover {
+    background: #eee;
+}
+
+.icon ion-icon {
+    font-size: 1.25rem;
+}

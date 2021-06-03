@@ -15,21 +15,9 @@ main p {
 }
 
 main button {
-    outline: none;
-    border: none;
-    background: dodgerblue;
-    user-select: none;
-    color: #fff;
     margin: 0 0 1.25rem 0;
     padding: 0.75rem 1.25rem;
-    font-size: 1rem;
-    border-radius: 0.25rem;
-    cursor: pointer;
-    transition: filter 0.1s ease;
-}
 
-main button:hover {
-    filter: brightness(0.9);
 }
 
 main .canvas-container {
@@ -52,41 +40,52 @@ footer {
     text-align: center;
 }
 
-/*<main>
-        <h1>🎨 Evolve a Painting</h1>
-        <p>Leverage genetic algorithms to evovle a population of paintings</p>
-        <button>Start Evolving</button>
-        
-        <div class="canvas-container">
-            <canvas id="img-source"></canvas>
-            <canvas id="img-result"></canvas>
-        </div>
-    </main>
-
-    <div id="settings">
-        <ion-icon name="settings-outline"></ion-icon>
-    </div>
-*/
-
 #settings {
-    height: 2.5rem;
-    width: 2.5rem;
-    border-radius: 50%;
     position: fixed;
     bottom: 1rem;
     left: 1rem;
+}
+
+.modal-wrapper {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
     display: flex;
     align-items: center;
     justify-content: center;
-    cursor: pointer;
-    background: #fff;
-    transition: background 0.1s ease;
 }
 
-#settings:hover {
+.modal-wrapper .modal {
+    width: 30rem;
+    box-shadow: 0 0.5rem 1rem rgba(255, 255, 255, 0.5);
+    background: #fff;
+    border-radius: 1rem;
+    padding: 2.5rem;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+}
+
+.modal-wrapper .modal .icon {
+    font-size: 1rem;
+    cursor: pointer;
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+}
+
+.modal-wrapper .modal h1 {
+    margin: 0 0 1.5rem 0;
+}
+
+/* .modal-wrapper .modal input {
     background: #eee;
 }
 
-#settings ion-icon {
-    font-size: 1.25rem;
-}
+.modal-wrapper .modal button {
+    --box-shadow-color: var(--lp);
+    background: var(--p);
+} */
