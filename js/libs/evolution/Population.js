@@ -8,14 +8,14 @@ export default class Population {
     polygons = []
     fitness = 0
 
-    constructor(dimensions, polygonCount, verticeCount) {
+    constructor(dimensions, polygonCount, verticeCount, dnaMode) {
         this.dimensions = dimensions
 
         if(!verticeCount && Array.isArray(polygonCount)) {
             this.polygons = polygonCount
         } else {
             for(let i = 0; i < polygonCount; i++) {
-                this.polygons.push(new Polygon(this.dimensions, verticeCount))
+                this.polygons.push(new Polygon(this.dimensions, verticeCount, dnaMode))
             }
         }
 
@@ -36,7 +36,7 @@ export default class Population {
         return new Population(this.dimensions, this.polygons)
     }
 
-    mutate(dimensions, verticeCount, mutationMode) {
+    mutate(mutationMode) {
         let i = Math.floor(random(this.polygons.length))
         
         switch(mutationMode) {
@@ -54,22 +54,22 @@ export default class Population {
                         this.polygons[i].color.a = Math.random()
                     }
                 } else {
-                    let vertexIndex = Math.floor(random(verticeCount))                
+                    let vertexIndex = Math.floor(random(this.polygons[0].vertices.length))                
                     
                     if(roulette < 1.5) {
-                        this.polygons[i].vertices[vertexIndex][0] = random(dimensions.width)
+                        this.polygons[i].vertices[vertexIndex][0] = random(this.dimensions.width)
                     } else {
-                        this.polygons[i].vertices[vertexIndex][1] = random(dimensions.height)
+                        this.polygons[i].vertices[vertexIndex][1] = random(this.dimensions.height)
                     }
                 }
             }
         }
     }
 
-    calculateFitness(dimensions, source) {
+    calculateFitness(source) {
         this.fitness = 0
 
-        this.testCtx.clearRect(0, 0, dimensions.width, dimensions.height)
+        this.testCtx.clearRect(0, 0, this.dimensions.width, this.dimensions.height)
         this.render(this.testCtx)
         const result = this.testCtx.getImageData(0, 0, this.dimensions.width, this.dimensions.height)
 
