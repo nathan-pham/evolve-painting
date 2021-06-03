@@ -1,10 +1,10 @@
 import Population from "./Population.js"
 
 export default class PopulationManager {
-    populations = []
     dimensions = {}
+    populations = []
 
-    constructor({ dimensions, polygonCount=100, populationCount=100, verticeCount=4, mutationChance=0.05 }) {
+    constructor({ dimensions, populationCount=100, polygonCount=100, verticeCount=4, mutationChance=0.05 }) {
         this.dimensions = dimensions
 
         for(let i = 0; i < populationCount; i++) {
@@ -12,17 +12,25 @@ export default class PopulationManager {
         }
     }
 
-    render(ctx, source, result) {
-        let totalFitness = 0
-        let bestPopulation = fitness
+    calculateFitness(sourceCtx, resultCtx) {
+        const source = sourceCtx.getImageData(0, 0, dimensions.width, dimensions.height)
+        const result = resultCtx.getImageData(0, 0, dimensions.width, dimensions.height)
 
-        for(const population of populations) {
+        let totalFitness = 0
+        let bestPopulation = population
+
+        for(const population of this.populations) {
             population.calculateFitness(source, result)
             totalFitness += population.fitness
-            
+                
             if(fitness > bestPopulation.fitness) {
                 bestPopulation = population
             }
         }
+    }
+
+    render(ctx) {
+
+        // this.population.render(ctx)
     }
 }

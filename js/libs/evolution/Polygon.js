@@ -1,4 +1,4 @@
-import { random } from "./math.js"
+import { random } from "../math.js"
 
 export default class Polygon {
     color = `rgba(${random(255)}, ${random(255)}, ${random(255)}, ${random(1)})`
