@@ -10,14 +10,9 @@ export const load = async (path) => (
     new Promise((resolve, reject) => {
         const img = new Image()
 
-        img.onload = () => {
-            resolve(img)
-        }
-
-        img.onerror = () => {
-            reject("failed to load image")
-        }
-
+        img.crossOrigin = "Anonymous"
+        img.onload = () => resolve(img)
+        img.onerror = () => reject("failed to load image")
         img.src = path
     })
 )
@@ -37,5 +32,5 @@ export const fit = (image, canvas) => {
     const xOffset = newWidth > canvas.width ? (canvas.width - newWidth) / 2 : 0
     const yOffset = newHeight > canvas.height ? (canvas.height - newHeight) / 2 : 0
 
-    ctx.drawImage(image, xOffset, yOffset, newWidth, newHeight);
+    ctx.drawImage(image, xOffset, yOffset, newWidth, newHeight)
 }
