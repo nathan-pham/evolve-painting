@@ -9,7 +9,8 @@ let EV_ID = 0
 
 const main = (async () => {
     const [sourceCanvas, resultCanvas] = $("canvas")
-    const statistics = $("#statistics")[0]
+    const startEvolving = $("#start-evolving")[0]
+    // const statistics = $("#statistics")[0]
     // const fitnessSpan = $("#fitness")[0]
 
     const dimensions = {
@@ -29,9 +30,12 @@ const main = (async () => {
 
     const resultCtx = resultCanvas.getContext("2d")
 
-    EV_ID = setInterval(() => {
-        populationManager.core(resultCtx, source)
-        statistics.textContent = `mutations: ${populationManager.mutations}, improvements: ${populationManager.improvements}, fitness: ${populationManager.normalizedFitness.toFixed(2)}%`
-    }, 0)
+
+    startEvolving.addEventListener("click", () => {
+        EV_ID = setInterval(() => {
+            populationManager.core(resultCtx, source)
+            // statistics.textContent = `mutations: ${populationManager.mutations}, improvements: ${populationManager.improvements}, fitness: ${populationManager.normalizedFitness.toFixed(2)}%`
+        }, 0)
+    })
 })()
 
