@@ -9,6 +9,7 @@ const path = "/js/libs/evolution/mona-lisa.jpg"
 
 const main = (async () => {
     const [sourceCanvas, resultCanvas] = $("canvas")
+    const generation = $("#generation")
 
     const dimensions = {
         width: sourceCanvas.offsetWidth,
@@ -21,14 +22,15 @@ const main = (async () => {
     const image = await load(path)
     fit(image, sourceCanvas)
 
-    const populationManager = new PopulationManger({ dimensions, verticeCount: 3 })
+    const populationManager = new PopulationManger({ dimensions })
     const sourceCtx = sourceCanvas.getContext("2d")
     const resultCtx = resultCanvas.getContext("2d")
 
 
     animate(() => {
+        resultCtx.clearRect(0, 0, dimensions.width, dimensions.height);
         populationManager.core(resultCtx, sourceCtx)
-        console.log(populationManager.generation)
+        generation.textContent = populationManager.generation
     })
 })()
 

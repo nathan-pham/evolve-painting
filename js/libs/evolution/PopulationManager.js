@@ -10,7 +10,7 @@ export default class PopulationManager {
     dimensions = {}
     generation = 0
 
-    constructor({ dimensions, populationCount=100, polygonCount=100, verticeCount=4, mutationChance=0.05 }) {
+    constructor({ dimensions, populationCount=1, polygonCount=100, verticeCount=6, mutationChance=0.01 }) {
         this.mutationChance = mutationChance
         this.verticeCount = verticeCount
         this.dimensions = dimensions
@@ -70,7 +70,7 @@ export default class PopulationManager {
         return pool[Math.floor(random(pool.length))]
     }
 
-    core(resultCtx, sourceCtx) {
+    core(resultCtx, sourceCtx, crossover=false) {
         this.generation++
 
         const bestPopulation = this.calculateFitness(sourceCtx)
@@ -78,24 +78,29 @@ export default class PopulationManager {
         const cachePopulations = []
 
         for(let i = 0; i < this.populations.length; i++) {
-            let parentA = this.selectPopulation(pool)
-            let parentB = this.selectPopulation(pool)
+            let child
 
-            let childPolygons = []
-            let divider = Math.floor(Math.random() * parentA.polygons.length)
-
-            for(let i = 0; i < parentA.polygons.length; i++) {
-                childPolygons.push(i < divider ? parentA.polygons[i] : parentB.polygons[i])
+            if(crossover) {
+                let parentA = this.selectPopulation(pool)
+                let parentB = this.selectPopulation(pool)
+    
+                let childPolygons = []
+                let divider = Math.floor(Math.random() * parentA.polygons.length)
+    
+                for(let i = 0; i < parentA.polygons.length; i++) {
+                    childPolygons.push(i < divider ? parentA.polygons[i] : parentB.polygons[i])
+                }
+    
+                child = new Population(childPolygons)
+            } else {
+                child = new Population(this.selectPopulation(pool).polygons)
             }
 
-            let child = new Population(childPolygons)
             child.mutate(this.dimensions, this.verticeCount, this.mutationChance)
             cachePopulations.push(child)
         }
 
         this.populations = cachePopulations
-
-        resultCtx.clearRect(0, 0, this.dimensions.width, this.dimensionsheight);
         bestPopulation.render(resultCtx)
     }
 }
