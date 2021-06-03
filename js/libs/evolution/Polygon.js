@@ -1,7 +1,12 @@
 import { random } from "../math.js"
 
+const randomColor = () => {
+    const _random = (int) => Math.floor(random(int))
+    return `rgba(${_random(255)}, ${_random(255)}, ${_random(255)}, ${random(1)})`
+}
+
 export default class Polygon {
-    color = `rgba(${random(255)}, ${random(255)}, ${random(255)}, ${random(1)})`
+    color = randomColor()
     vertices = []
 
     constructor(dimensions, verticeCount) {
