@@ -23,7 +23,7 @@ const main = (async () => {
     const image = await load(SOURCE_PATH)
     fit(image, sourceCanvas)
 
-    const populationManager = new PopulationManger({ dimensions })
+    const populationManager = new PopulationManger({ dimensions, polygonCount: 100 })
     const sourceCtx = sourceCanvas.getContext("2d")
     const source = sourceCtx.getImageData(0, 0, dimensions.width, dimensions.height)
 
