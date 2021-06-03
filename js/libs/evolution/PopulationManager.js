@@ -6,7 +6,8 @@ export default class PopulationManager {
     verticeCount = 4
     dimensions = {}
 
-    generation = 0
+    mutations = 0
+    improvements = 0
     // fitnessPercent = 0
 
     constructor({ dimensions, polygonCount=50, verticeCount=6, mutationMode="medium", dnaMode="black" }) {
@@ -19,14 +20,17 @@ export default class PopulationManager {
     }
 
     core(resultCtx, source) {
-        this.generation++
+        this.mutations++
         this.population.calculateFitness(source)
 
         let child = this.population.clone()
         child.mutate(this.mutationMode)
         child.calculateFitness(source)
 
-        this.population = child.fitness > this.population.fitness ? child : this.population
+        if(child.fitness > this.population.fitness) {
+            this.improvements++
+            this.population = child
+        }
 
         resultCtx.fillStyle = "rgb(255, 255, 255)"
         resultCtx.fillRect(0, 0, this.dimensions.width, this.dimensions.height)

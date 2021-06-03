@@ -9,7 +9,7 @@ let EV_ID = 0
 
 const main = (async () => {
     const [sourceCanvas, resultCanvas] = $("canvas")
-    const generationSpan = $("#generation")[0]
+    const statistics = $("#statistics")[0]
     // const fitnessSpan = $("#fitness")[0]
 
     const dimensions = {
@@ -28,11 +28,11 @@ const main = (async () => {
     const resultCtx = resultCanvas.getContext("2d")
 
     const source = sourceCtx.getImageData(0, 0, dimensions.width, dimensions.height)
-
+    const NORM_COEF = dimensions.width * dimensions.height * 3 * 255
 
     EV_ID = setInterval(() => {
         populationManager.core(resultCtx, source)
-        generationSpan.textContent = populationManager.generation
+        statistics.textContent = `mutations: ${populationManager.mutations}, improvements: ${populationManager.improvements}, fitness: ${(100 * (1 - populationManager.population.fitness) / NORM_COEF).toFixed(2)}%`
     }, 0)
 })()
 
