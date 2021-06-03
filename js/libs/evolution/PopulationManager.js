@@ -18,14 +18,12 @@ export default class PopulationManager {
         for(let i = 0; i < populationCount; i++) {
             this.populations.push(new Population(dimensions, polygonCount, verticeCount))
         }
-    }
 
-    createCanvas() {
         const canvas = document.createElement("canvas")
         const ctx = canvas.getContext("2d")
         resolution(canvas, this.dimensions)
 
-        return [canvas, ctx]
+        this.testCtx = ctx
     }
 
     calculateFitness(sourceCtx) {
@@ -35,9 +33,8 @@ export default class PopulationManager {
         let bestPopulation = this.populations[0]
 
         for(const population of this.populations) {
-            const [_, resultCtx] = this.createCanvas()
-            population.render(resultCtx)
-            const result = resultCtx.getImageData(0, 0, this.dimensions.width, this.dimensions.height)
+            population.render(this.testCtx)
+            const result = this.testCtx.getImageData(0, 0, this.dimensions.width, this.dimensions.height)
 
             population.calculateFitness(source, result)
             totalFitness += population.fitness
@@ -49,6 +46,8 @@ export default class PopulationManager {
 
         for(const population of this.populations) {
             population.fitness /= totalFitness
+
+            // 1-FITNESS_BEST/IWIDTH*IHEIGHT*3*255
         }
 
         return bestPopulation
