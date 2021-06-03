@@ -13,6 +13,8 @@ export const random = (min, max) => (
     !max ? Math.random() * min : Math.random() * (max - min) + min
 )
 
+export const randInt = (max) => Math.round(random(max))
+
 export const constrain = (n, min, max) => (
     n < min
         ? min

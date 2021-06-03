@@ -1,22 +1,25 @@
-import { random } from "../math.js"
+import { randInt } from "../math.js"
 
 export default class Polygon {
     vertices = []
+    color = { r: 0, g: 0, b: 0, a: 0 }
 
     constructor(dimensions, verticeCount, dnaMode) {
-        for(let i = 0; i < verticeCount; i++) {
-            this.vertices.push([random(dimensions.width), random(dimensions.height)])
-        }
-
-        switch(dnaMode) {
-            case "black":
-                this.color = { r: 0, g: 0, b: 0, a: 0.001 }
-                break
-            case "white":
-                this.color = { r: 255, g: 255, b: 255, a: 0.001 }
-                break
-            default:
-                this.color = { r: random(255), g: random(255), b: random(255), a: 0.001 }
+        if(verticeCount && dnaMode) {
+            for(let i = 0; i < verticeCount; i++) {
+                this.vertices.push([randInt(dimensions.width), randInt(dimensions.height)])
+            }
+    
+            switch(dnaMode) {
+                case "black":
+                    this.color = { r: 0, g: 0, b: 0, a: 0.001 }
+                    break
+                case "white":
+                    this.color = { r: 255, g: 255, b: 255, a: 0.001 }
+                    break
+                default:
+                    this.color = { r: random(255), g: random(255), b: random(255), a: 0.001 }
+            }
         }
     }
 

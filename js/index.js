@@ -13,8 +13,8 @@ const main = (async () => {
     // const fitnessSpan = $("#fitness")[0]
 
     const dimensions = {
-        width: 200 || sourceCanvas.offsetWidth,
-        height: 200 || sourceCanvas.offsetWidth
+        width: sourceCanvas.offsetWidth,
+        height: sourceCanvas.offsetWidth
     }
     
     resolution(sourceCanvas, dimensions)
@@ -25,14 +25,13 @@ const main = (async () => {
 
     const populationManager = new PopulationManger({ dimensions })
     const sourceCtx = sourceCanvas.getContext("2d")
-    const resultCtx = resultCanvas.getContext("2d")
-
     const source = sourceCtx.getImageData(0, 0, dimensions.width, dimensions.height)
-    const NORM_COEF = dimensions.width * dimensions.height * 3 * 255
+
+    const resultCtx = resultCanvas.getContext("2d")
 
     EV_ID = setInterval(() => {
         populationManager.core(resultCtx, source)
-        statistics.textContent = `mutations: ${populationManager.mutations}, improvements: ${populationManager.improvements}, fitness: ${(100 * (1 - populationManager.population.fitness) / NORM_COEF).toFixed(2)}%`
+        statistics.textContent = `mutations: ${populationManager.mutations}, improvements: ${populationManager.improvements}, fitness: ${populationManager.normalizedFitness.toFixed(2)}%`
     }, 0)
 })()
 

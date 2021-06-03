@@ -1,5 +1,4 @@
 import Population from "./Population.js"
-import { random } from "../math.js"
 
 export default class PopulationManager {
     mutationMode = 0.05
@@ -8,33 +7,34 @@ export default class PopulationManager {
 
     mutations = 0
     improvements = 0
-    // fitnessPercent = 0
+    normalizedFitness = 0
+
+    bestFitness = Infinity
+    bestPopulation = {}
 
     constructor({ dimensions, polygonCount=50, verticeCount=6, mutationMode="medium", dnaMode="black" }) {
         this.mutationMode = mutationMode
-        this.verticeCount = verticeCount
         this.dimensions = dimensions
-        this.dnaMode = dnaMode
 
         this.population = new Population(dimensions, polygonCount, verticeCount, dnaMode)
     }
 
-    core(resultCtx, source) {
+    core(ctx, source) {
+        this.population.mutate(this.mutationMode)
         this.mutations++
-        this.population.calculateFitness(source)
 
-        let child = this.population.clone()
-        child.mutate(this.mutationMode)
-        child.calculateFitness(source)
+        this.population.fitness = this.population.calculateFitness(source)
+        this.population.render(ctx)
 
-        if(child.fitness > this.population.fitness) {
+        const NORM_COEF = this.dimensions.width * this.dimensions.height * 3 * 255
+
+        if(this.population.fitness < this.bestFitness) {
+            this.bestFitness = this.population.fitness
+            this.bestPopulation = this.population.clone()
             this.improvements++
-            this.population = child
+            this.normalizedFitness = 100 * (1 - this.bestFitness / NORM_COEF)
+        } else {
+            this.population = this.bestPopulation.clone()
         }
-
-        resultCtx.fillStyle = "rgb(255, 255, 255)"
-        resultCtx.fillRect(0, 0, this.dimensions.width, this.dimensions.height)
-
-        this.population.render(resultCtx)
     }
 }

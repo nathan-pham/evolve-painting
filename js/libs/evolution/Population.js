@@ -1,18 +1,19 @@
 import Polygon from "./Polygon.js"
 
+import { random, randInt } from "../math.js"
 import { resolution } from "../canvas.js"
-import { random } from "../math.js"
 
 export default class Population {
     dimensions = {}
     polygons = []
-    fitness = 0
+    fitness = -1
 
     constructor(dimensions, polygonCount, verticeCount, dnaMode) {
         this.dimensions = dimensions
 
-        if(!verticeCount && Array.isArray(polygonCount)) {
+        if(Array.isArray(polygonCount)) {
             this.polygons = polygonCount
+            this.fitness = verticeCount
         } else {
             for(let i = 0; i < polygonCount; i++) {
                 this.polygons.push(new Polygon(this.dimensions, verticeCount, dnaMode))
@@ -20,54 +21,72 @@ export default class Population {
         }
 
         const canvas = document.createElement("canvas")
-        const ctx = canvas.getContext("2d")
         resolution(canvas, this.dimensions)
 
-        this.testCtx = ctx
+        this.testCtx = canvas.getContext("2d")
     }
 
     render(ctx) {
+        ctx.fillStyle = "rgb(255, 255, 255)"
+        ctx.fillRect(0, 0, this.dimensions.width, this.dimensions.height)
+
         for(const polygon of this.polygons) {
             polygon.render(ctx)
         }
     }
     
     clone() {
-        return new Population(this.dimensions, this.polygons)
+        let polygons = []
+
+        for(let polygon of this.polygons) {
+            let polygonClone = new Polygon(this.dimensions)
+
+            Object.assign(polygonClone, {
+                color: {...polygon.color},
+                vertices: polygon.vertices.reduce((acc, cur) => [...acc, [...cur]], [])
+            })
+
+            polygons.push(polygonClone)
+        }
+
+        return new Population(this.dimensions, [...polygons], this.fitness)
     }
 
     mutate(mutationMode) {
         let i = Math.floor(random(this.polygons.length))
-        
+        let polygon = this.polygons[i]
+
         switch(mutationMode) {
             case "medium": {
                 const roulette = random(2)
                     
                 if(roulette < 1) {
                     if(roulette < 0.25) {
-                        this.polygons[i].color.r = random(255)
+                        polygon.color.r = randInt(255)
                     } else if(roulette < 0.5) {
-                        this.polygons[i].color.g = random(255)
+                        polygon.color.g = randInt(255)
                     } else if(roulette < 0.75) {
-                        this.polygons[i].color.b = random(255)
+                        polygon.color.b = randInt(255)
                     } else if(roulette < 1) {
-                        this.polygons[i].color.a = Math.random()
+                        polygon.color.a = Math.random()
                     }
                 } else {
                     let vertexIndex = Math.floor(random(this.polygons[0].vertices.length))                
                     
                     if(roulette < 1.5) {
-                        this.polygons[i].vertices[vertexIndex][0] = random(this.dimensions.width)
+                        polygon.vertices[vertexIndex][0] = randInt(this.dimensions.width)
                     } else {
-                        this.polygons[i].vertices[vertexIndex][1] = random(this.dimensions.height)
+                        polygon.vertices[vertexIndex][1] = randInt(this.dimensions.height)
                     }
                 }
             }
         }
+
+        this.polygons[i] = polygon
     }
 
     calculateFitness(source) {
-        this.fitness = 0
+        let fitness = 0
 
         this.testCtx.fillStyle = "rgb(255, 255, 255)"
         this.testCtx.fillRect(0, 0, this.dimensions.width, this.dimensions.height)
@@ -76,8 +95,8 @@ export default class Population {
         const result = this.testCtx.getImageData(0, 0, this.dimensions.width, this.dimensions.height)
 
         for (let i = 0; i < source.data.length; i++) {
-            if(i % 4 !== 3) {
-                this.fitness += Math.abs(source.data[i] - result.data[i])
+            if(i % 4 != 3) {
+                fitness += Math.abs(source.data[i] - result.data[i])
             }
 
             // depth = 4
@@ -86,6 +105,6 @@ export default class Population {
             // diff += Math.abs(source.data[4 * i + 2] - result.data[4 * i + 2]) / 255;
         }
 
-        return this.fitness
+        return fitness
     }
 }

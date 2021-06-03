@@ -28,10 +28,10 @@ main button {
 }
 
 main .canvas-container {
-    /* display: flex; */
-    /* align-items: stretch; */
-    /* gap: 1.5rem; */
-    /* max-width: calc(100% - 1.5rem); */
+    display: flex;
+    align-items: stretch;
+    gap: 1.5rem;
+    max-width: calc(100% - 1.5rem);
 }
 
 main .canvas-container canvas {
