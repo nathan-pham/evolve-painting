@@ -1,12 +1,7 @@
 import { random } from "../math.js"
 
-const randomColor = () => {
-    const _random = (int) => Math.floor(random(int))
-    return `rgba(${_random(255)}, ${_random(255)}, ${_random(255)}, ${random(1)})`
-}
-
 export default class Polygon {
-    color = randomColor()
+    color = { r: random(255), g: random(255), b: random(255), a: 0.001 }
     vertices = []
 
     constructor(dimensions, verticeCount) {
@@ -16,7 +11,7 @@ export default class Polygon {
     }
 
     render(ctx) {
-        ctx.fillStyle = this.color
+        ctx.fillStyle = `rgba(${this.color.r}, ${this.color.g}, ${this.color.b}, ${this.color.a})`
         ctx.beginPath()
     
         const [genesisX, genesisY] = this.vertices[0]

@@ -4,14 +4,14 @@ import { resolution } from "../canvas.js"
 import { random } from "../math.js"
 
 export default class PopulationManager {
-    mutationChance = 0.05
+    mutationMode = 0.05
     verticeCount = 4
     populations = []
     dimensions = {}
     generation = 0
 
-    constructor({ dimensions, populationCount=1, polygonCount=100, verticeCount=6, mutationChance=0.01 }) {
-        this.mutationChance = mutationChance
+    constructor({ dimensions, populationCount=1, polygonCount=100, verticeCount=6, mutationMode="medium" }) {
+        this.mutationMode = mutationMode
         this.verticeCount = verticeCount
         this.dimensions = dimensions
 
@@ -96,7 +96,7 @@ export default class PopulationManager {
                 child = new Population(this.selectPopulation(pool).polygons)
             }
 
-            child.mutate(this.dimensions, this.verticeCount, this.mutationChance)
+            child.mutate(this.dimensions, this.verticeCount, this.mutationMode)
             cachePopulations.push(child)
         }
 

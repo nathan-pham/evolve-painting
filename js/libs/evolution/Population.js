@@ -1,5 +1,7 @@
 import Polygon from "./Polygon.js"
 
+import { random } from "../math.js"
+
 export default class Population {
     polygons = []
     fitness = 0
@@ -20,10 +22,32 @@ export default class Population {
         }
     }
     
-    mutate(dimensions, verticeCount, mutationChance) {
+    mutate(dimensions, verticeCount, mutationMode) {
         for(let i = 0; i < this.polygons.length; i++) {
-            if(Math.random() < mutationChance) {
-                this.polygons[i] = new Polygon(dimensions, verticeCount)
+            switch(mutationMode) {
+                case "medium": {
+                    const roulette = random(2)
+                    
+                    if(roulette < 1) {
+                        if(roulette < 0.25) {
+                            this.polygons[i].color.r = random(255)
+                        } else if(roulette < 0.5) {
+                            this.polygons[i].color.g = random(255)
+                        } else if(roulette < 0.75) {
+                            this.polygons[i].color.b = random(255)
+                        } else if(roulette < 1) {
+                            this.polygons[i].color.a = Math.random()
+                        }
+                    } else {
+                        let vertexIndex = Math.floor(random(verticeCount))
+                        
+                        if(roulette < 1.5) {
+                            this.polygons[i].vertices[vertexIndex][0] = random(dimensions.width)
+                        } else {
+                            this.polygons[i].vertices[vertexIndex][1] = random(dimensions.height)
+                        }
+                    }
+                }
             }
         }   
     }
