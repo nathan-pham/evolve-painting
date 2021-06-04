@@ -8,7 +8,7 @@ import { h, $ } from "./utils.js"
 
 let GLOBAL_STATE = {
     SOURCE_PATH: "/js/libs/evolution/mona-lisa.jpg",
-    POLYGON_COUNT: 50,
+    POLYGON_COUNT: 100,
     VERTICE_COUNT: 6,
     EV_ID: 0
 }

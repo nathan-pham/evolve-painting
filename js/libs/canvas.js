@@ -37,7 +37,7 @@ export const fit = (canvas, image) => {
     const cWidth = parseInt(canvas.style.width)
     const cHeight = parseInt(canvas.style.height)
 
-    let newWidth = canvasWidth
+    let newWidth = cWidth
     let newHeight = newWidth / ratio
 
     if (newHeight < cHeight) {
@@ -45,11 +45,11 @@ export const fit = (canvas, image) => {
         newWidth = newHeight * ratio
     }
 
-    const xOffset = newWidth > canvasWidth ? (canvasWidth - newWidth) / 2 : 0
+    const xOffset = newWidth > cWidth ? (cWidth - newWidth) / 2 : 0
     const yOffset = newHeight > cHeight ? (cHeight - newHeight) / 2 : 0
 
     ctx.fillStyle = "rgb(255, 255, 255)"
-    ctx.fillRect(0, 0, canvasWidth, cHeight)
+    ctx.fillRect(0, 0, cWidth, cHeight)
     ctx.drawImage(image, xOffset, yOffset, newWidth, newHeight)
 }
 

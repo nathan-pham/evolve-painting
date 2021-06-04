@@ -20,10 +20,9 @@ export default class Population {
             }
         }
 
-        const canvas = document.createElement("canvas")
-        resolution(canvas, this.dimensions)
-
-        this.testCtx = canvas.getContext("2d")
+        this.testCanvas = document.createElement("canvas")
+        this.testCtx = this.testCanvas.getContext("2d")
+        resolution(this.testCanvas, this.dimensions)
     }
 
     render(ctx) {
@@ -87,22 +86,13 @@ export default class Population {
 
     calculateFitness(source) {
         let fitness = 0
-
-        this.testCtx.fillStyle = "rgb(255, 255, 255)"
-        this.testCtx.fillRect(0, 0, this.dimensions.width, this.dimensions.height)
         this.render(this.testCtx)
-
         const result = this.testCtx.getImageData(0, 0, this.dimensions.width, this.dimensions.height)
 
         for (let i = 0; i < source.data.length; i++) {
             if(i % 4 != 3) {
                 fitness += Math.abs(source.data[i] - result.data[i])
             }
-
-            // depth = 4
-            // diff += Math.abs(source.data[4 * i + 0] - result.data[4 * i + 0]) / 255;
-            // diff += Math.abs(source.data[4 * i + 1] - result.data[4 * i + 1]) / 255;
-            // diff += Math.abs(source.data[4 * i + 2] - result.data[4 * i + 2]) / 255;
         }
 
         return fitness
