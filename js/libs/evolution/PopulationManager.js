@@ -16,6 +16,8 @@ export default class PopulationManager {
         this.mutationMode = mutationMode
         this.dimensions = dimensions
 
+        console.log(polygonCount)
+
         this.population = new Population(dimensions, polygonCount, verticeCount, dnaMode)
     }
 
@@ -24,7 +26,6 @@ export default class PopulationManager {
         this.mutations++
 
         this.population.fitness = this.population.calculateFitness(source)
-        this.population.render(ctx)
 
         const NORM_COEF = this.dimensions.width * this.dimensions.height * 3 * 255
 
@@ -33,6 +34,7 @@ export default class PopulationManager {
             this.bestPopulation = this.population.clone()
             this.improvements++
             this.normalizedFitness = 100 * (1 - this.bestFitness / NORM_COEF)
+            this.bestPopulation.render(ctx)
         } else {
             this.population = this.bestPopulation.clone()
         }

@@ -26,9 +26,8 @@ main .canvas-container {
 }
 
 main .canvas-container canvas {
-    flex: 0 0 50%;
+    flex: 0 0 calc(50% - 0.75rem);
     border-radius: 0.75rem;
-    max-width: calc(50% - 0.75rem);
     box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.25);
 }
 
@@ -109,11 +108,11 @@ footer {
     align-self: flex-end;
 }
 
-/* .modal-wrapper .modal input {
-    background: #eee;
+.modal-wrapper .options {
+    display: flex;
+    justify-content: space-between;
 }
 
-.modal-wrapper .modal button {
-    --box-shadow-color: var(--lp);
-    background: var(--p);
-} */
+.modal-wrapper .options button {
+    flex: 0 0 calc(50% - 0.5rem);
+}

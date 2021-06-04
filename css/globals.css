@@ -24,6 +24,11 @@ button {
     transition: filter 0.1s ease;
 }
 
+button.secondary {
+    background: #eee;
+    color: #000;
+}
+
 button:hover {
     filter: brightness(0.9);
 }

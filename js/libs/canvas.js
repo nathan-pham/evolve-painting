@@ -43,5 +43,7 @@ export const fit = (canvas, image, RESOLUTION_FACTOR) => {
     const xOffset = newWidth > canvasWidth ? (canvasWidth - newWidth) / 2 : 0
     const yOffset = newHeight > canvasHeight ? (canvasHeight - newHeight) / 2 : 0
 
+    ctx.fillStyle = "rgb(255, 255, 255)"
+    ctx.fillRect(0, 0, canvasWidth, canvasHeight)
     ctx.drawImage(image, xOffset, yOffset, newWidth, newHeight)
 }
