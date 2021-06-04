@@ -53,7 +53,7 @@ const main = async () => {
             
             h("div", { className: "options" },
                 h("button", { className: "secondary", onClick: () => {
-                    download(dimensions.width, populationManager.population.polygons)
+                    download(dimensions.width, populationManager.bestPopulation.polygons)
                 }}, "Download Image"),
                 h("button", { onClick: async () => {
                     const [path, polygons, vertices] = modal.querySelectorAll("input")

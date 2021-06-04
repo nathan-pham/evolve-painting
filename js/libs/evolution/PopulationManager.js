@@ -20,9 +20,10 @@ export default class PopulationManager {
 
     core(ctx, source) {
         this.population.mutate(this.mutationMode)
-        this.mutations++
-
         this.population.fitness = this.population.calculateFitness(source)
+        this.population.render(ctx)
+
+        this.mutations++
 
         const NORM_COEF = this.dimensions.width * this.dimensions.height * 3 * 255
 
@@ -31,7 +32,6 @@ export default class PopulationManager {
             this.bestPopulation = this.population.clone()
             this.improvements++
             this.normalizedFitness = 100 * (1 - this.bestFitness / NORM_COEF)
-            this.bestPopulation.render(ctx)
         } else {
             this.population = this.bestPopulation.clone()
         }
