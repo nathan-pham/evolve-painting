@@ -1,7 +1,7 @@
 import "https://cdn.jsdelivr.net/npm/ionicons/dist/ionicons/ionicons.esm.js"
 import PopulationManger from "./libs/evolution/PopulationManager.js"
 
-import { resolution, load, fit } from "./libs/canvas.js"
+import { resolution, download, load, fit } from "./libs/canvas.js"
 import { modalComponent } from "./components/modal.js"
 import { inputComponent } from "./components/input.js"
 import { h, $ } from "./utils.js"
@@ -10,7 +10,7 @@ const DEFAULT_SOURCE_PATH = "/js/libs/evolution/mona-lisa.jpg"
 
 let GLOBAL_STATE = {
     SOURCE_PATH: DEFAULT_SOURCE_PATH,
-    RESOLUTION_FACTOR: 3,
+    RESOLUTION_FACTOR: 2,
     POLYGON_COUNT: 50,
     VERTICE_COUNT: 6,
     EV_ID: 0
@@ -54,7 +54,9 @@ const main = async () => {
             inputComponent(`${GLOBAL_STATE.VERTICE_COUNT}/100 Vertices`, { min: 3, max: 100,  value: GLOBAL_STATE.VERTICE_COUNT, name: "vertices", onChange: (e) => e.target.parentNode.querySelector("label").textContent = `${e.target.value}/100 Vertices` }),
             
             h("div", { className: "options" },
-                h("button", { className: "secondary" }, "Download Image"),
+                h("button", { className: "secondary", onClick: () => {
+                    download(resultCanvas)
+                }}, "Download Image"),
                 h("button", { onClick: () => {
                     const [path, polygons, vertices] = modal.querySelectorAll("input")
                     GLOBAL_STATE = {
@@ -90,7 +92,7 @@ const main = async () => {
                 populationManager.core(resultCtx, source)
 
                 if(modal && document.body.contains(modal)) {
-                    document.getElementById("statistics").textContent = `mutations: ${populationManager.mutations}, improvements: ${populationManager.improvements}, fitness: ${populationManager.normalizedFitness.toFixed(2)}%`
+                    document.getElementById("statistics").textContent = `mutations: ${populationManager.mutations}, improvements: ${populationManager.improvements}, fitness: ${populationManager.normalizedFitness.toFixed(2)}%, dimensions: ${dimensions.width} x ${dimensions.width}`
                 }
             }, 0)
         } else {

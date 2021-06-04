@@ -15,9 +15,6 @@ export default class PopulationManager {
     constructor({ dimensions, polygonCount=50, verticeCount=6, mutationMode="medium", dnaMode="black" }) {
         this.mutationMode = mutationMode
         this.dimensions = dimensions
-
-        console.log(polygonCount)
-
         this.population = new Population(dimensions, polygonCount, verticeCount, dnaMode)
     }
 

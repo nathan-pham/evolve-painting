@@ -1,3 +1,5 @@
+import { h } from "../utils.js"
+
 export const resolution = (canvas, dimensions, RESOLUTION_FACTOR) => {
     const reduce = (obj, alter) => (
         Object.keys(obj).reduce((acc, cur) => ({
@@ -46,4 +48,8 @@ export const fit = (canvas, image, RESOLUTION_FACTOR) => {
     ctx.fillStyle = "rgb(255, 255, 255)"
     ctx.fillRect(0, 0, canvasWidth, canvasHeight)
     ctx.drawImage(image, xOffset, yOffset, newWidth, newHeight)
+}
+
+export const download = (canvas) => {
+    h("a", { style: "display: none", download: "image-evolution.png", href: canvas.toDataURL("image/png") }).click()
 }
