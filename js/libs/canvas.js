@@ -53,6 +53,29 @@ export const fit = (canvas, image, RESOLUTION_FACTOR) => {
     ctx.drawImage(image, xOffset, yOffset, newWidth, newHeight)
 }
 
-export const download = (canvas) => {
+export const download = (realSize, polygons) => {
+    let targetSize = 1024
+    let scale = targetSize / realSize
+
+    const canvas = h("canvas", { width: targetSize, height: targetSize })
+    const ctx = canvas.getContext("2d")
+
+    ctx.fillStyle = "rgb(255, 255, 255)"
+    ctx.fillRect(0, 0, targetSize, targetSize)
+
+    for(const polygon of polygons) {
+        ctx.fillStyle = `rgba(${polygon.color.r}, ${polygon.color.g}, ${polygon.color.b}, ${polygon.color.a})`
+        ctx.beginPath()
+
+        const [genesisX, genesisY] = polygon.vertices[0]
+        ctx.moveTo(genesisX * scale, genesisY * scale)
+        for(const vertice of polygon.vertices.slice(1)) {
+            ctx.lineTo(vertice[0] * scale, vertice[1] * scale)
+        }
+        
+        ctx.closePath()
+        ctx.fill()
+    }
+
     h("a", { style: "display: none", download: "image-evolution.png", href: canvas.toDataURL("image/png") }).click()
 }

@@ -8,7 +8,7 @@ import { h, $ } from "./utils.js"
 
 let GLOBAL_STATE = {
     SOURCE_PATH: "/js/libs/evolution/mona-lisa.jpg",
-    RESOLUTION_FACTOR: 2,
+    RESOLUTION_FACTOR: 1, // increase for more detail but much less speed
     POLYGON_COUNT: 50,
     VERTICE_COUNT: 6,
     EV_ID: 0
@@ -52,16 +52,14 @@ const main = async () => {
             
             h("div", { className: "options" },
                 h("button", { className: "secondary", onClick: () => {
-                    download(resultCanvas)
+                    download(dimensions.width, populationManager.population.polygons)
                 }}, "Download Image"),
                 h("button", { onClick: async () => {
                     const [path, polygons, vertices] = modal.querySelectorAll("input")
                     const NEW_SOURCE_PATH = path.value
 
-                    if(NEW_SOURCE_PATH !== GLOBAL_STATE.SOURCE_PATH) {
-                        fit(sourceCanvas, await load(NEW_SOURCE_PATH), GLOBAL_STATE.RESOLUTION_FACTOR)
-                        source = sourceCtx.getImageData(0, 0, dimensions.width, dimensions.height)
-                    }
+                    fit(sourceCanvas, await load(NEW_SOURCE_PATH), GLOBAL_STATE.RESOLUTION_FACTOR)
+                    source = sourceCtx.getImageData(0, 0, dimensions.width, dimensions.height)
 
                     GLOBAL_STATE = {
                         ...GLOBAL_STATE,
@@ -79,7 +77,7 @@ const main = async () => {
                     if(evolveButton.textContent.toLowerCase().includes("start")) {
                         clearInterval(GLOBAL_STATE.EV_ID)
                     }
-                    
+
                     modal.querySelector(".icon").click()
                     modal = null
                 }}, "Save Settings"),
@@ -96,7 +94,7 @@ const main = async () => {
                 populationManager.core(resultCtx, source)
 
                 if(modal && document.body.contains(modal)) {
-                    document.getElementById("statistics").textContent = `mutations: ${populationManager.mutations}, improvements: ${populationManager.improvements}, fitness: ${populationManager.normalizedFitness.toFixed(2)}%, dimensions: ${dimensions.width} x ${dimensions.width}`
+                    document.getElementById("statistics").textContent = `mutations: ${populationManager.mutations}, improvements: ${populationManager.improvements}, fitness: ${populationManager.normalizedFitness.toFixed(2)}%`
                 }
             }, 0)
         } else {
