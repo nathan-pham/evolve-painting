@@ -23,6 +23,9 @@ export default class Population {
         this.testCanvas = document.createElement("canvas")
         this.testCtx = this.testCanvas.getContext("2d")
         resolution(this.testCanvas, this.dimensions)
+
+        // document.body.appendChild(this.testCanvas)
+        // this.testCtx.drawImage(document.querySelectorAll("canvas")[0], 0, 0, 100, 100)
     }
 
     render(ctx) {

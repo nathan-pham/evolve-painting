@@ -5,6 +5,8 @@ export default class Polygon {
     color = { r: 0, g: 0, b: 0, a: 0 }
 
     constructor(dimensions, verticeCount, dnaMode) {
+        this.dimensions = dimensions
+
         if(verticeCount && dnaMode) {
             for(let i = 0; i < verticeCount; i++) {
                 this.vertices.push([randInt(dimensions.width), randInt(dimensions.height)])

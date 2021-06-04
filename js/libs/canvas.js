@@ -8,11 +8,12 @@ export const resolution = (canvas, dimensions) => {
         }), {})
     )
 
-    const scale = window.devicePixelRatio || 1
+    const scale = 1 // window.devicePixelRatio || 1 
+    // screw devicePixelRatio 
     const ctx = canvas.getContext("2d")
 
     Object.assign(canvas, reduce(dimensions, (cur) => Math.floor(cur * scale)))
-    Object.assign(canvas.style, reduce(dimensions, (cur) => cur + "px"))
+    Object.assign(canvas.style, reduce(dimensions, (cur) => cur  + "px"))
     ctx.scale(scale, scale)
 }
 
