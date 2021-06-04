@@ -22,7 +22,10 @@ export const load = async (path) => (
 
         img.crossOrigin = "Anonymous"
         img.onload = () => resolve(img)
-        img.onerror = () => reject("failed to load image")
+        img.onerror = async () => {
+            console.log("failed to load image, using mona lisa instead")
+            resolve(await load("/js/libs/evolution/mona-lisa.jpg"))
+        }
         img.src = path
     })
 )

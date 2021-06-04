@@ -6,10 +6,8 @@ import { modalComponent } from "./components/modal.js"
 import { inputComponent } from "./components/input.js"
 import { h, $ } from "./utils.js"
 
-const DEFAULT_SOURCE_PATH = "/js/libs/evolution/mona-lisa.jpg"
-
 let GLOBAL_STATE = {
-    SOURCE_PATH: DEFAULT_SOURCE_PATH,
+    SOURCE_PATH: "/js/libs/evolution/mona-lisa.jpg",
     RESOLUTION_FACTOR: 2,
     POLYGON_COUNT: 50,
     VERTICE_COUNT: 6,
@@ -28,8 +26,7 @@ const main = async () => {
     resolution(sourceCanvas, dimensions, GLOBAL_STATE.RESOLUTION_FACTOR)
     resolution(resultCanvas, dimensions, GLOBAL_STATE.RESOLUTION_FACTOR)
 
-    const image = await load(GLOBAL_STATE.SOURCE_PATH)
-    fit(sourceCanvas, image, GLOBAL_STATE.RESOLUTION_FACTOR)
+    fit(sourceCanvas, await load(GLOBAL_STATE.SOURCE_PATH), GLOBAL_STATE.RESOLUTION_FACTOR)
 
     let populationManager = new PopulationManger({ 
         dimensions, 
@@ -39,15 +36,15 @@ const main = async () => {
 
     const sourceCtx = sourceCanvas.getContext("2d")
     const resultCtx = resultCanvas.getContext("2d")
-    const source = sourceCtx.getImageData(0, 0, dimensions.width, dimensions.height)
 
+    let source = sourceCtx.getImageData(0, 0, dimensions.width, dimensions.height)
     let modal
 
     settingsButton.onclick = () => {
         modal = modalComponent("Settings",
             h("p", {}, `Changing settings will reset evolution.`),
             h("p", { id: "statistics" }, "Start evolution to see statistics."),
-            h("input", { placeholder: DEFAULT_SOURCE_PATH, value: GLOBAL_STATE.SOURCE_PATH, type: "text" }),
+            h("input", { placeholder: "/js/libs/evolution/mona-lisa.jpg", value: GLOBAL_STATE.SOURCE_PATH, type: "text" }),
             
             inputComponent(`${GLOBAL_STATE.POLYGON_COUNT}/1000 Polygons`, { min: 10, max: 1000, value: GLOBAL_STATE.POLYGON_COUNT, name: "polygons", onChange: (e) => e.target.parentNode.querySelector("label").textContent = `${e.target.value}/1000 Polygons`}),
 
@@ -57,11 +54,18 @@ const main = async () => {
                 h("button", { className: "secondary", onClick: () => {
                     download(resultCanvas)
                 }}, "Download Image"),
-                h("button", { onClick: () => {
+                h("button", { onClick: async () => {
                     const [path, polygons, vertices] = modal.querySelectorAll("input")
+                    const NEW_SOURCE_PATH = path.value
+
+                    if(NEW_SOURCE_PATH !== GLOBAL_STATE.SOURCE_PATH) {
+                        fit(sourceCanvas, await load(NEW_SOURCE_PATH), GLOBAL_STATE.RESOLUTION_FACTOR)
+                        source = sourceCtx.getImageData(0, 0, dimensions.width, dimensions.height)
+                    }
+
                     GLOBAL_STATE = {
                         ...GLOBAL_STATE,
-                        SOURCE_PATH: path.value,
+                        SOURCE_PATH: NEW_SOURCE_PATH,
                         POLYGON_COUNT: parseInt(polygons.value),
                         VERTICE_COUNT: parseInt(vertices.value),
                     }
@@ -76,7 +80,7 @@ const main = async () => {
                         clearInterval(GLOBAL_STATE.EV_ID)
                     }
                     
-                    modal.remove()
+                    modal.querySelector(".icon").click()
                     modal = null
                 }}, "Save Settings"),
             )
