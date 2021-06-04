@@ -1,6 +1,6 @@
 import { h } from "../utils.js"
 
-export const resolution = (canvas, dimensions, RESOLUTION_FACTOR) => {
+export const resolution = (canvas, dimensions, RESOLUTION_FACTOR=1) => {
     const reduce = (obj, alter) => (
         Object.keys(obj).reduce((acc, cur) => ({
             ...acc,
