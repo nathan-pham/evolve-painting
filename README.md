@@ -9,7 +9,7 @@ View it [live](https://evolve-painting.vercel.app/)
 4. repeat from 2
 
 ## Screenshots
-The Mona Lisa, evolved for 2 hours
+The Mona Lisa, evolved for 2 hours  
 ![finished product](https://media.discordapp.net/attachments/769322501083758622/850337277124935680/g40R6lPmKV0AAAAASUVORK5CYII.png)
 
 ## Contributing
