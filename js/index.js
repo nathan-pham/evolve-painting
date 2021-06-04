@@ -38,12 +38,13 @@ const main = async () => {
     const resultCtx = resultCanvas.getContext("2d")
 
     let source = sourceCtx.getImageData(0, 0, dimensions.width, dimensions.height)
+    let statistics = "Start evolution to see statistics."
     let modal
 
     settingsButton.onclick = () => {
         modal = modalComponent("Settings",
             h("p", {}, `Changing settings will reset evolution.`),
-            h("p", { id: "statistics" }, "Start evolution to see statistics."),
+            h("p", { id: "statistics" }, statistics),
             h("input", { placeholder: "/js/libs/evolution/mona-lisa.jpg", value: GLOBAL_STATE.SOURCE_PATH, type: "text" }),
             
             inputComponent(`${GLOBAL_STATE.POLYGON_COUNT}/1000 Polygons`, { min: 10, max: 1000, value: GLOBAL_STATE.POLYGON_COUNT, name: "polygons", onChange: (e) => e.target.parentNode.querySelector("label").textContent = `${e.target.value}/1000 Polygons`}),
@@ -58,8 +59,11 @@ const main = async () => {
                     const [path, polygons, vertices] = modal.querySelectorAll("input")
                     const NEW_SOURCE_PATH = path.value
 
-                    fit(sourceCanvas, await load(NEW_SOURCE_PATH), GLOBAL_STATE.RESOLUTION_FACTOR)
-                    source = sourceCtx.getImageData(0, 0, dimensions.width, dimensions.height)
+                    if(NEW_SOURCE_PATH !== GLOBAL_STATE.SOURCE_PATH) {
+                        fit(sourceCanvas, await load(NEW_SOURCE_PATH), GLOBAL_STATE.RESOLUTION_FACTOR)
+                        source = sourceCtx.getImageData(0, 0, dimensions.width, dimensions.height)
+                        statistics = "Start evolution to see statistics."
+                    }
 
                     GLOBAL_STATE = {
                         ...GLOBAL_STATE,
@@ -94,7 +98,8 @@ const main = async () => {
                 populationManager.core(resultCtx, source)
 
                 if(modal && document.body.contains(modal)) {
-                    document.getElementById("statistics").textContent = `mutations: ${populationManager.mutations}, improvements: ${populationManager.improvements}, fitness: ${populationManager.normalizedFitness.toFixed(2)}%`
+                    statistics = `mutations: ${populationManager.mutations}, improvements: ${populationManager.improvements}, fitness: ${populationManager.normalizedFitness.toFixed(2)}%`
+                    document.getElementById("statistics").textContent = statistics
                 }
             }, 0)
         } else {
