@@ -1,6 +1,6 @@
 import { h } from "../utils.js"
 
-export const resolution = (canvas, dimensions, RESOLUTION_FACTOR=1) => {
+export const resolution = (canvas, dimensions) => {
     const reduce = (obj, alter) => (
         Object.keys(obj).reduce((acc, cur) => ({
             ...acc,
@@ -12,7 +12,7 @@ export const resolution = (canvas, dimensions, RESOLUTION_FACTOR=1) => {
     const ctx = canvas.getContext("2d")
 
     Object.assign(canvas, reduce(dimensions, (cur) => Math.floor(cur * scale)))
-    Object.assign(canvas.style, reduce(dimensions, (cur) => cur / RESOLUTION_FACTOR + "px"))
+    Object.assign(canvas.style, reduce(dimensions, (cur) => cur + "px"))
     ctx.scale(scale, scale)
 }
 
@@ -30,26 +30,26 @@ export const load = async (path) => (
     })
 )
 
-export const fit = (canvas, image, RESOLUTION_FACTOR) => {
+export const fit = (canvas, image) => {
     const ctx = canvas.getContext("2d")
     const ratio = image.width / image.height
     
-    const canvasWidth = parseInt(canvas.style.width) * RESOLUTION_FACTOR
-    const canvasHeight = parseInt(canvas.style.height) * RESOLUTION_FACTOR
+    const cWidth = parseInt(canvas.style.width)
+    const cHeight = parseInt(canvas.style.height)
 
     let newWidth = canvasWidth
     let newHeight = newWidth / ratio
 
-    if (newHeight < canvasHeight) {
-        newHeight = canvasHeight
+    if (newHeight < cHeight) {
+        newHeight = cHeight
         newWidth = newHeight * ratio
     }
 
     const xOffset = newWidth > canvasWidth ? (canvasWidth - newWidth) / 2 : 0
-    const yOffset = newHeight > canvasHeight ? (canvasHeight - newHeight) / 2 : 0
+    const yOffset = newHeight > cHeight ? (cHeight - newHeight) / 2 : 0
 
     ctx.fillStyle = "rgb(255, 255, 255)"
-    ctx.fillRect(0, 0, canvasWidth, canvasHeight)
+    ctx.fillRect(0, 0, canvasWidth, cHeight)
     ctx.drawImage(image, xOffset, yOffset, newWidth, newHeight)
 }
 

@@ -8,7 +8,6 @@ import { h, $ } from "./utils.js"
 
 let GLOBAL_STATE = {
     SOURCE_PATH: "/js/libs/evolution/mona-lisa.jpg",
-    RESOLUTION_FACTOR: 1, // increase for more detail but much less speed
     POLYGON_COUNT: 50,
     VERTICE_COUNT: 6,
     EV_ID: 0
@@ -20,13 +19,13 @@ const main = async () => {
     const evolveButton = $("#evolve")[0]
 
     const dimensions = {
-        width: sourceCanvas.offsetWidth * GLOBAL_STATE.RESOLUTION_FACTOR,
-        height: sourceCanvas.offsetWidth * GLOBAL_STATE.RESOLUTION_FACTOR
+        width: sourceCanvas.offsetWidth,
+        height: sourceCanvas.offsetWidth
     }
-    resolution(sourceCanvas, dimensions, GLOBAL_STATE.RESOLUTION_FACTOR)
-    resolution(resultCanvas, dimensions, GLOBAL_STATE.RESOLUTION_FACTOR)
+    resolution(sourceCanvas, dimensions)
+    resolution(resultCanvas, dimensions)
 
-    fit(sourceCanvas, await load(GLOBAL_STATE.SOURCE_PATH), GLOBAL_STATE.RESOLUTION_FACTOR)
+    fit(sourceCanvas, await load(GLOBAL_STATE.SOURCE_PATH))
 
     let populationManager = new PopulationManger({ 
         dimensions, 
@@ -60,7 +59,7 @@ const main = async () => {
                     const NEW_SOURCE_PATH = path.value
 
                     if(NEW_SOURCE_PATH !== GLOBAL_STATE.SOURCE_PATH) {
-                        fit(sourceCanvas, await load(NEW_SOURCE_PATH), GLOBAL_STATE.RESOLUTION_FACTOR)
+                        fit(sourceCanvas, await load(NEW_SOURCE_PATH))
                         source = sourceCtx.getImageData(0, 0, dimensions.width, dimensions.height)
                         statistics = "Start evolution to see statistics."
                     }
