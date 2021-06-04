@@ -1,5 +1,5 @@
 # Evolve a Painting
-Leverage genetic algorithms to evolve a population of polygons into a recognizable painting
+Leverage genetic algorithms to evolve a population of polygons into a recognizable painting  
 View it [live](https://evolve-painting.vercel.app/)
 
 ## Concept
